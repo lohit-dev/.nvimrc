@@ -16,7 +16,7 @@ return {
       start_in_insert = true,
       insert_mappings = false, -- whether or not the open mapping applies in insert mode
       terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-      persist_size = true,
+      persist_size = false, 
       persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
       direction = "horizontal", -- default direction
       close_on_exit = true, -- close the terminal window when the process exits
@@ -35,19 +35,60 @@ return {
     -- Custom keymaps for terminal
     local Terminal = require("toggleterm.terminal").Terminal
 
+    -- Create separate terminal instances for different directions
+    -- Use unique count IDs to separate them and set sizes directly
+    local vertical_term = Terminal:new({
+      direction = "vertical",
+      count = 2,
+      on_open = function(term)
+        -- Resize immediately on open - use schedule to ensure window is ready
+        vim.schedule(function()
+          if term and term.bufnr then
+            local wins = vim.fn.win_findbuf(term.bufnr)
+            if #wins > 0 and vim.api.nvim_win_is_valid(wins[1]) then
+              local cols = math.floor(vim.o.columns * 0.5)
+              vim.api.nvim_win_set_width(wins[1], cols)
+            end
+          end
+        end)
+      end,
+    })
+
+    local horizontal_term = Terminal:new({
+      direction = "horizontal",
+      count = 3,
+      size = 15, -- 15 lines
+      on_open = function(term)
+        -- Resize immediately on open - use schedule to ensure window is ready
+        vim.schedule(function()
+          if term and term.bufnr then
+            local wins = vim.fn.win_findbuf(term.bufnr)
+            if #wins > 0 and vim.api.nvim_win_is_valid(wins[1]) then
+              vim.api.nvim_win_set_height(wins[1], 15)
+            end
+          end
+        end)
+      end,
+    })
+
+    local float_term = Terminal:new({
+      direction = "float",
+      count = 4,
+    })
+
     -- Terminal vertical split
     vim.keymap.set("n", "<leader>tv", function()
-      require("toggleterm").toggle(1, nil, nil, nil, "vertical")
+      vertical_term:toggle()
     end, { desc = "Toggle terminal vertical" })
 
     -- Terminal horizontal split
     vim.keymap.set("n", "<leader>th", function()
-      require("toggleterm").toggle(1, nil, nil, nil, "horizontal")
+      horizontal_term:toggle()
     end, { desc = "Toggle terminal horizontal" })
 
     -- Terminal float
     vim.keymap.set("n", "<leader>tf", function()
-      require("toggleterm").toggle(1, nil, nil, nil, "float")
+      float_term:toggle()
     end, { desc = "Toggle terminal float" })
 
     -- Terminal window mappings for easier navigation

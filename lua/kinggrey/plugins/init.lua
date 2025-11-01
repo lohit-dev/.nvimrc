@@ -16,9 +16,11 @@ return {
   require("kinggrey.plugins.treesitter"),
   require("kinggrey.plugins.autopairs"),
   require("kinggrey.plugins.indent_line"),
+  require("kinggrey.plugins.autotag"), -- Auto-close HTML/JSX tags
 
   -- UI plugins
   require("kinggrey.plugins.ui"),
+  require("kinggrey.plugins.profile"), -- Profile/dashboard homepage
 
   -- Utility plugins
   require("kinggrey.plugins.debug"),
@@ -26,6 +28,7 @@ return {
   require("kinggrey.plugins.oil"), -- oil.nvim + extensions
   require("kinggrey.plugins.neo-tree"), -- Disabled, kept for future just in case
   require("kinggrey.plugins.toggleterm"),
+  require("kinggrey.plugins.web-tools"), -- Web dev tools (browser-sync, hurl, npm/yarn/npx)
 
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),

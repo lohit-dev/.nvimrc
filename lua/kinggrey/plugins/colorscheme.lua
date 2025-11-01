@@ -5,10 +5,11 @@
 return {
   "Mofiqul/dracula.nvim",
   priority = 1000, -- Make sure this loads before other plugins
+  -- enabled = false,
   config = function()
     local dracula = require("dracula")
     local colors = dracula.colors()
-    
+
     dracula.setup({
       theme = "dracula-soft",
       -- show the '~' characters after the end of buffers
@@ -29,4 +30,3 @@ return {
     vim.cmd("colorscheme dracula-soft")
   end,
 }
-

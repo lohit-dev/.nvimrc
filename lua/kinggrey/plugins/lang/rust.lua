@@ -15,15 +15,10 @@ return {
         -- LSP configuration
         server = {
           on_attach = function(client, bufnr)
-            vim.keymap.set(
-              "n",
-              "<leader>a",
-              function()
-                vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
-                -- or vim.lsp.buf.codeAction() if you don't want grouping.
-              end,
-              { silent = true, buffer = bufnr, desc = "Rust code actions" }
-            )
+            vim.keymap.set("n", "<leader>a", function()
+              vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
+              -- or vim.lsp.buf.codeAction() if you don't want grouping.
+            end, { silent = true, buffer = bufnr, desc = "Rust code actions" })
 
             -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
             vim.keymap.set(
@@ -38,9 +33,7 @@ return {
           settings = {
             ["rust-analyzer"] = {
               -- Enable check on save with clippy
-              checkOnSave = {
-                command = "clippy",
-              },
+              checkOnSave = true,
             },
           },
         },
@@ -64,4 +57,3 @@ return {
     },
   },
 }
-
