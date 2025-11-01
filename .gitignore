@@ -1,0 +1,13 @@
+tags
+test.sh
+.luarc.json
+nvim
+
+spell/
+lazy-lock.json
+
+# Node/bun
+node_modules/
+bun.lockb
+package-lock.json
+yarn.lock

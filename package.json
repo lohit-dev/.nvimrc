@@ -1,0 +1,21 @@
+{
+  "name": "kvim-neovim-config",
+  "version": "1.0.0",
+  "description": "Neovim configuration with auto-formatting on commit",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "format": "stylua lua/"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0"
+  },
+  "keywords": [
+    "neovim",
+    "vim",
+    "config"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "bun@1.0.0"
+}

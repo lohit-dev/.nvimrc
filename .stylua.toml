@@ -1,0 +1,31 @@
+# Lua syntax version to target
+syntax = "All"
+
+# Maximum line width before wrapping (160 is quite wide, 100-120 is more readable)
+column_width = 100
+
+# Line ending style
+line_endings = "Unix"
+
+# Indentation settings (matches your keymap.lua)
+indent_type = "Spaces"
+indent_width = 2
+
+# Quote style preference
+quote_style = "AutoPreferDouble"
+
+# Use parentheses in function calls with single arguments (better readability)
+call_parentheses = "Always"
+
+# Don't add space between function names and parentheses
+space_after_function_names = "Never"
+
+# Preserve newline gaps in blocks for better readability
+block_newline_gaps = "Preserve"
+
+# Don't collapse simple statements (keeps code more readable)
+collapse_simple_statement = "Never"
+
+# Sort require statements alphabetically
+[sort_requires]
+enabled = true

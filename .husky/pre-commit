@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Format Lua files with stylua before commit
+echo "🔧 Formatting Lua files with stylua..."
+stylua lua/
+
+# Add the formatted files back to staging
+git add lua/
