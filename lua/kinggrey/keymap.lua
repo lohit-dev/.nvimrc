@@ -51,52 +51,99 @@ vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "[W]rite/Save file" 
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "[B]uffer [D]elete (current)" })
 vim.keymap.set("n", "<leader>br", function()
   local current_buf = vim.api.nvim_get_current_buf()
-  local buflist = vim.api.nvim_list_bufs()
-  local current_win = vim.api.nvim_get_current_win()
-  local win_row, win_col = unpack(vim.api.nvim_win_get_position(current_win))
+  local all_bufs = vim.api.nvim_list_bufs()
   local buffers_to_delete = {}
-
-  for _, buf in ipairs(buflist) do
-    if buf ~= current_buf and vim.api.nvim_buf_is_loaded(buf) then
-      local buf_wins = vim.fn.win_findbuf(buf)
-      for _, win in ipairs(buf_wins) do
-        local buf_row, buf_col = unpack(vim.api.nvim_win_get_position(win))
-        -- Check if buffer window is to the right (same row, higher col) or below (higher row)
-        if (buf_row == win_row and buf_col > win_col) or buf_row > win_row then
-          buffers_to_delete[buf] = true
-          break
+  
+  -- Find current buffer index in the buffer list
+  local current_idx = nil
+  local listed_bufs = {}
+  
+  for idx, buf in ipairs(all_bufs) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      local buf_listed = vim.api.nvim_buf_get_option(buf, "buflisted")
+      local buf_type = vim.api.nvim_buf_get_option(buf, "buftype")
+      
+      -- Only consider regular file buffers
+      if buf_listed and (buf_type == "" or buf_type == "acwrite") then
+        table.insert(listed_bufs, buf)
+        if buf == current_buf then
+          current_idx = #listed_bufs
         end
       end
     end
   end
+  
+  -- Delete all buffers to the right (after current) in the buffer list
+  if current_idx then
+    for i = current_idx + 1, #listed_bufs do
+      local buf = listed_bufs[i]
+      if buf ~= current_buf and vim.api.nvim_buf_is_valid(buf) then
+        buffers_to_delete[buf] = true
+      end
+    end
+  end
 
+  -- Delete the buffers
   for buf, _ in pairs(buffers_to_delete) do
-    vim.api.nvim_buf_delete(buf, { force = true })
+    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+      pcall(vim.api.nvim_buf_delete, buf, { force = true })
+    end
+  end
+  
+  local count = vim.tbl_count(buffers_to_delete)
+  if count > 0 then
+    vim.notify("Deleted " .. count .. " buffer(s) to the right", vim.log.levels.INFO)
+  else
+    vim.notify("No buffers found to the right", vim.log.levels.WARN)
   end
 end, { desc = "[B]uffer delete [R]ight" })
+
 vim.keymap.set("n", "<leader>bl", function()
   local current_buf = vim.api.nvim_get_current_buf()
-  local buflist = vim.api.nvim_list_bufs()
-  local current_win = vim.api.nvim_get_current_win()
-  local win_row, win_col = unpack(vim.api.nvim_win_get_position(current_win))
+  local all_bufs = vim.api.nvim_list_bufs()
   local buffers_to_delete = {}
-
-  for _, buf in ipairs(buflist) do
-    if buf ~= current_buf and vim.api.nvim_buf_is_loaded(buf) then
-      local buf_wins = vim.fn.win_findbuf(buf)
-      for _, win in ipairs(buf_wins) do
-        local buf_row, buf_col = unpack(vim.api.nvim_win_get_position(win))
-        -- Check if buffer window is to the left (same row, lower col) or above (lower row)
-        if (buf_row == win_row and buf_col < win_col) or buf_row < win_row then
-          buffers_to_delete[buf] = true
-          break
+  
+  -- Find current buffer index in the buffer list
+  local current_idx = nil
+  local listed_bufs = {}
+  
+  for idx, buf in ipairs(all_bufs) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      local buf_listed = vim.api.nvim_buf_get_option(buf, "buflisted")
+      local buf_type = vim.api.nvim_buf_get_option(buf, "buftype")
+      
+      -- Only consider regular file buffers
+      if buf_listed and (buf_type == "" or buf_type == "acwrite") then
+        table.insert(listed_bufs, buf)
+        if buf == current_buf then
+          current_idx = #listed_bufs
         end
       end
     end
   end
+  
+  -- Delete all buffers to the left (before current) in the buffer list
+  if current_idx then
+    for i = 1, current_idx - 1 do
+      local buf = listed_bufs[i]
+      if buf ~= current_buf and vim.api.nvim_buf_is_valid(buf) then
+        buffers_to_delete[buf] = true
+      end
+    end
+  end
 
+  -- Delete the buffers
   for buf, _ in pairs(buffers_to_delete) do
-    vim.api.nvim_buf_delete(buf, { force = true })
+    if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+      pcall(vim.api.nvim_buf_delete, buf, { force = true })
+    end
+  end
+  
+  local count = vim.tbl_count(buffers_to_delete)
+  if count > 0 then
+    vim.notify("Deleted " .. count .. " buffer(s) to the left", vim.log.levels.INFO)
+  else
+    vim.notify("No buffers found to the left", vim.log.levels.WARN)
   end
 end, { desc = "[B]uffer delete [L]eft" })
 vim.keymap.set("n", ";", ":", { desc = "Enter command mode" })

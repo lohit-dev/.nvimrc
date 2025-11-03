@@ -4,7 +4,7 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
-    enabled = false,
+    enabled = true,
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -28,7 +28,6 @@ return {
     enabled = true,
     config = function()
       local dracula = require("dracula")
-      local colors = dracula.colors()
 
       dracula.setup({
         theme = "dracula-soft",
@@ -90,11 +89,10 @@ return {
     "sainnhe/gruvbox-material",
     lazy = false,
     priority = 1000,
+    enabled = true,
     config = function()
       vim.g.gruvbox_material_enable_italic = true
       -- vim.cmd.colorscheme("gruvbox-material")
-
-      -- Make statusline completely transparent (no background bar)
       vim.api.nvim_set_hl(0, "StatusLine", {
         bg = "NONE",
         fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg or "#ebdbb2",

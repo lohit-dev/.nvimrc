@@ -1,3 +1,6 @@
+-- Base46 cache loading (only if base46 is installed)
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46_cache/"
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -36,3 +39,18 @@ require("lazy").setup(all_plugins, {
     },
   },
 })
+
+-- Load base46 cache files if they exist (only when using base46/NvChad)
+local base46_dir = vim.fn.stdpath("data") .. "/base46_cache"
+if vim.fn.isdirectory(base46_dir) == 1 then
+  local defaults_file = vim.g.base46_cache .. "defaults"
+  local statusline_file = vim.g.base46_cache .. "statusline"
+
+  if vim.fn.filereadable(defaults_file) == 1 then
+    dofile(defaults_file)
+  end
+
+  if vim.fn.filereadable(statusline_file) == 1 then
+    dofile(statusline_file)
+  end
+end

@@ -21,7 +21,7 @@ return {
   -- UI plugins
   require("kinggrey.plugins.ui"),
   require("kinggrey.plugins.profile"), -- Profile/dashboard homepage
-  require("kinggrey.plugins.ghostty"),
+  require("kinggrey.plugins.nvchad"),
 
   -- Utility plugins
   require("kinggrey.plugins.debug"),
