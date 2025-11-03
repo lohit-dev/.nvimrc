@@ -28,6 +28,8 @@ vim.o.inccommand = "split"
 vim.o.cursorline = true -- Enabled but styled subtly in colorscheme
 vim.o.scrolloff = 10
 vim.o.confirm = true
+-- Maintain block cursor in all modes (including insert mode) for stock vim feel
+vim.o.guicursor = ""
 -- Ensure modifiable is enabled globally to avoid permission issues
 vim.o.modifiable = true
 

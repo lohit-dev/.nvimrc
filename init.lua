@@ -15,10 +15,8 @@ rtp:prepend(lazypath)
 -- Load keymap configuration before lazy setup
 require("kinggrey.keymap")
 
--- Setup lazy.nvim with all plugins
--- Plugins are organized in separate files for better maintainability
-local plugins = require("kinggrey.plugins")
 local lsp_plugins = require("kinggrey.plugins.lsp")
+local plugins = require("kinggrey.plugins")
 
 -- Combine all plugins into a single table
 local all_plugins = {}
