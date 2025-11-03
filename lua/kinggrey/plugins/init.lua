@@ -21,6 +21,7 @@ return {
   -- UI plugins
   require("kinggrey.plugins.ui"),
   require("kinggrey.plugins.profile"), -- Profile/dashboard homepage
+  require("kinggrey.plugins.ghostty"),
 
   -- Utility plugins
   require("kinggrey.plugins.debug"),
@@ -34,4 +35,3 @@ return {
   require("kinggrey.plugins.lang.rust"),
   require("kinggrey.plugins.lang.go"),
 }
-
