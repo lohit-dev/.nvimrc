@@ -21,7 +21,6 @@ return {
   -- UI plugins
   require("kinggrey.plugins.ui"),
   require("kinggrey.plugins.profile"), -- Profile/dashboard homepage
-  require("kinggrey.plugins.nvchad"),
 
   -- Utility plugins
   require("kinggrey.plugins.debug"),
@@ -30,6 +29,7 @@ return {
   require("kinggrey.plugins.neo-tree"), -- Disabled, kept for future just in case
   require("kinggrey.plugins.toggleterm"),
   require("kinggrey.plugins.web-tools"), -- Web dev tools (browser-sync, hurl, npm/yarn/npx)
+  require("kinggrey.plugins.nvchad"),
 
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),

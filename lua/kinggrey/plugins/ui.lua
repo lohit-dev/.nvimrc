@@ -34,12 +34,12 @@ return {
           },
           hover = {
             enabled = true,
-            silent = false,
+            silent = true, -- Make hover silent so it doesn't steal focus when typing
           },
           signature = {
             enabled = true,
             auto_open = {
-              enabled = true,
+              enabled = false, -- Disable auto-open to prevent interference when typing strings
               trigger = true,
               luasnip = true,
               throttle = 50,

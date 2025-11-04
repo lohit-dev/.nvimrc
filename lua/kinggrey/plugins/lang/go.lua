@@ -15,7 +15,8 @@ return {
     end,
     ---@module "gopher"
     ---@type gopher.Config
-    opts = {},
+    opts = {
+
+    },
   },
 }
-

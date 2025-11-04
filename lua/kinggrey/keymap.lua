@@ -212,3 +212,47 @@ vim.keymap.set("n", "<leader>gR", function()
     end
   end)
 end, { desc = "[G]it [R]ebase" })
+
+-- Package Management (Lazy.nvim)
+vim.keymap.set("n", "<leader>pl", function()
+  require("lazy").show()
+end, { desc = "[P]lugins [L]azy (show)" })
+
+vim.keymap.set("n", "<leader>pi", function()
+  require("lazy").install()
+end, { desc = "[P]lugins [I]nstall" })
+
+vim.keymap.set("n", "<leader>pS", function()
+  require("lazy").sync()
+end, { desc = "[P]lugins [S]ync" })
+
+vim.keymap.set("n", "<leader>ps", function()
+  require("lazy").status()
+end, { desc = "[P]lugins [S]tatus" })
+
+vim.keymap.set("n", "<leader>pu", function()
+  require("lazy").check()
+end, { desc = "[P]lugins Check for [U]pdates" })
+
+vim.keymap.set("n", "<leader>pU", function()
+  require("lazy").update()
+end, { desc = "[P]lugins [U]pdate" })
+
+-- Mason Package Manager
+vim.keymap.set("n", "<leader>pm", function()
+  vim.cmd("Mason")
+end, { desc = "[P]ackages [M]ason" })
+
+vim.keymap.set("n", "<leader>pM", function()
+  vim.cmd("MasonToolsUpdate")
+end, { desc = "[P]ackages [M]ason Update" })
+
+-- Code Actions
+vim.keymap.set({ "n", "v" }, "<leader>ca", function()
+  vim.lsp.buf.code_action()
+end, { desc = "[C]ode [A]ctions" })
+
+-- Buffer Navigation
+vim.keymap.set("n", "<S-l>", function()
+  vim.cmd("bnext")
+end, { desc = "Next buffer" })
