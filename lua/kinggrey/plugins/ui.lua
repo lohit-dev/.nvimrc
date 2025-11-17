@@ -5,18 +5,38 @@ return {
     event = "VeryLazy",
     config = function()
       local notify = require("notify")
+      local MAX_NOTIFICATIONS = 3
+      local active_notifications = {}
+
       notify.setup({
-        stages = "fade_in_slide_out",
-        timeout = 3000,
+        stages = "fade",
+        timeout = 1200,
+        top_down = false,
+        render = "wrapped-compact",
         max_height = function()
-          return math.floor(vim.o.lines * 0.75)
+          return math.max(1, math.floor(vim.o.lines * 0.2))
         end,
         max_width = function()
-          return math.floor(vim.o.columns * 0.75)
+          return math.floor(vim.o.columns * 0.4)
         end,
       })
-      -- Replace default vim.notify with nvim-notify
-      vim.notify = notify
+
+      -- Wrap vim.notify to keep only a handful of visible popups at once
+      vim.notify = function(msg, level, opts)
+        local notif = notify(msg, level, opts)
+        if notif and type(notif) == "table" and notif.close then
+          table.insert(active_notifications, notif)
+          while #active_notifications > MAX_NOTIFICATIONS do
+            local oldest = table.remove(active_notifications, 1)
+            if oldest and oldest.close then
+              pcall(function()
+                oldest:close()
+              end)
+            end
+          end
+        end
+        return notif
+      end
     end,
   },
   -- Noice UI - NvChad-like command line and messages UI

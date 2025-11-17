@@ -30,6 +30,7 @@ return {
   require("kinggrey.plugins.toggleterm"),
   require("kinggrey.plugins.web-tools"), -- Web dev tools (browser-sync, hurl, npm/yarn/npx)
   require("kinggrey.plugins.nvchad"),
+  require("kinggrey.plugins.leetcode"),
 
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),

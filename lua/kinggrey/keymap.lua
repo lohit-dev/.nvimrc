@@ -146,6 +146,10 @@ vim.keymap.set("n", "<leader>bl", function()
     vim.notify("No buffers found to the left", vim.log.levels.WARN)
   end
 end, { desc = "[B]uffer delete [L]eft" })
+
+vim.keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
+vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "[B]uffer [P]revious" })
+
 vim.keymap.set("n", ";", ":", { desc = "Enter command mode" })
 -- vim.keymap.set("n", ":", ";", { desc = "Repeat last f/F/t/T motion" })
 vim.keymap.set(
@@ -247,10 +251,87 @@ vim.keymap.set("n", "<leader>pM", function()
   vim.cmd("MasonToolsUpdate")
 end, { desc = "[P]ackages [M]ason Update" })
 
+-- UI toggles
+local kinggrey_themes = { "dracula-soft", "catppuccin", "gruvbox-material" }
+vim.g.kinggrey_theme_index = vim.g.kinggrey_theme_index
+  or (function()
+    local current = vim.g.colors_name
+    for idx, name in ipairs(kinggrey_themes) do
+      if name == current then
+        return idx
+      end
+    end
+    return 1
+  end)()
+
+local function cycle_colorscheme()
+  local count = #kinggrey_themes
+  local idx = (vim.g.kinggrey_theme_index or 1) % count + 1
+  vim.g.kinggrey_theme_index = idx
+  local theme = kinggrey_themes[idx]
+  local ok, err = pcall(vim.cmd.colorscheme, theme)
+  if ok then
+    vim.notify("Colorscheme: " .. theme, vim.log.levels.INFO)
+  else
+    vim.notify("Failed to load colorscheme " .. theme .. "\n" .. err, vim.log.levels.ERROR)
+  end
+end
+
+vim.keymap.set("n", "<leader>un", function()
+  vim.wo.number = true
+  vim.wo.relativenumber = not vim.wo.relativenumber
+end, { desc = "Toggle relative line numbers" })
+
+vim.keymap.set("n", "<leader>uw", function()
+  vim.wo.wrap = not vim.wo.wrap
+end, { desc = "Toggle word wrap" })
+
+vim.keymap.set("n", "<leader>ul", function()
+  vim.o.list = not vim.o.list
+end, { desc = "Toggle list characters" })
+
+vim.keymap.set("n", "<leader>ut", cycle_colorscheme, { desc = "Cycle colorscheme" })
+
+local function leet_exec(cmd)
+  local ok, err = pcall(vim.cmd, "Leet " .. cmd)
+  if not ok then
+    vim.notify("Leet command failed: " .. cmd .. "\n" .. err, vim.log.levels.ERROR)
+  end
+end
+
+local function leet_map(lhs, cmd, desc)
+  vim.keymap.set("n", lhs, function()
+    leet_exec(cmd)
+  end, { desc = desc })
+end
+
+leet_map("<leader>lm", "menu", "[L]eetCode [M]enu")
+leet_map("<leader>lx", "exit", "[L]eetCode e[X]it")
+leet_map("<leader>lc", "console", "[L]eetCode [C]onsole panel")
+leet_map("<leader>lr", "run", "[L]eetCode [R]un question")
+leet_map("<leader>lt", "test", "[L]eetCode [T]est question")
+leet_map("<leader>ls", "submit", "[L]eetCode [S]ubmit answer")
+leet_map("<leader>lH", "stats", "[L]eetCode s[Ta]ts toggle")
+leet_map("<leader>lL", "lang", "[L]eetCode change [L]anguage")
+leet_map("<leader>ld", "daily", "[L]eetCode [D]aily problem")
+leet_map("<leader>lo", "open", "[L]eetCode [O]pen in browser")
+
 -- Code Actions
 vim.keymap.set({ "n", "v" }, "<leader>ca", function()
   vim.lsp.buf.code_action()
 end, { desc = "[C]ode [A]ctions" })
+
+vim.keymap.set("n", "<leader>cf", function()
+  vim.lsp.buf.format({ async = false })
+end, { desc = "[C]ode [F]ormat buffer" })
+
+vim.keymap.set("n", "<leader>cr", function()
+  vim.lsp.buf.rename()
+end, { desc = "[C]ode [R]ename symbol" })
+
+vim.keymap.set("n", "<leader>cd", function()
+  vim.diagnostic.open_float(nil, { focus = false })
+end, { desc = "[C]ode show line [D]iagnostics" })
 
 -- Buffer Navigation
 vim.keymap.set("n", "<S-l>", function()
