@@ -1,35 +1,40 @@
+-- Colorscheme plugins.
+--
+-- None of these call `vim.cmd.colorscheme(...)` themselves anymore -- that
+-- used to be duplicated per-theme (and only dracula's was actually live,
+-- which is why nothing you picked ever stuck). Theme selection, persistence,
+-- and the shared statusline/highlight logic all now live in
+-- lua/kinggrey/theme.lua, applied once via M.load() after lazy.nvim finishes
+-- loading (see init.lua).
+--
+-- To switch themes: `:Theme <name>` or `:colorscheme <name>` (tab-complete
+-- works), or `:Telescope colorscheme` for a live preview picker. Whatever you
+-- land on gets remembered automatically for next launch.
+
 return {
-  -- Catppuccin
   {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
-    enabled = true,
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
         transparent_background = false,
         integrations = {
-          lualine = true,
+          lualine = {},
           treesitter = true,
           telescope = true,
           cmp = true,
         },
       })
-
-      -- vim.cmd.colorscheme("catppuccin")
     end,
   },
 
-  -- Dracula (original)
   {
     "Mofiqul/dracula.nvim",
     priority = 1000,
-    enabled = true,
     config = function()
-      local dracula = require("dracula")
-
-      dracula.setup({
+      require("dracula").setup({
         theme = "dracula-soft",
         show_end_of_buffer = true,
         transparent_bg = false,
@@ -43,91 +48,64 @@ return {
           }
         end,
       })
-
-      vim.cmd.colorscheme("dracula-soft")
-
-      -- Make statusline completely transparent (no background bar)
-      vim.api.nvim_set_hl(0, "StatusLine", {
-        bg = "NONE",
-        fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg or "#f8f8f2",
-      })
-      vim.api.nvim_set_hl(0, "StatusLineNC", {
-        bg = "NONE",
-        fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg or "#f8f8f2",
-      })
-
-      -- Statusline helper function
-      _G.kinggrey = _G.kinggrey or {}
-      _G.kinggrey.statusline = {
-        get_mode = function()
-          local mode = vim.api.nvim_get_mode().mode
-          local mode_map = {
-            n = "NORMAL",
-            i = "INSERT",
-            v = "VISUAL",
-            V = "VISUAL LINE",
-            ["\22"] = "VISUAL BLOCK",
-            c = "COMMAND",
-            t = "TERMINAL",
-            R = "REPLACE",
-            s = "SELECT",
-            S = "SELECT LINE",
-          }
-          return mode_map[mode] or mode:upper()
-        end,
-      }
-      package.loaded["kinggrey.statusline"] = _G.kinggrey.statusline
-
-      -- Minimal statusline: left corner | (invisible middle) | right corner
-      -- Only shows text at corners, no background bar
-      vim.opt.statusline =
-        "%{toupper(v:lua.require('kinggrey.statusline').get_mode())} %f%=%l:%c %p%%"
     end,
   },
-  -- Gruvbox Material
+
   {
     "sainnhe/gruvbox-material",
-    lazy = false,
     priority = 1000,
-    enabled = true,
     config = function()
       vim.g.gruvbox_material_enable_italic = true
-      -- vim.cmd.colorscheme("gruvbox-material")
-      vim.api.nvim_set_hl(0, "StatusLine", {
-        bg = "NONE",
-        fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg or "#ebdbb2",
-      })
-      vim.api.nvim_set_hl(0, "StatusLineNC", {
-        bg = "NONE",
-        fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg or "#ebdbb2",
-      })
+    end,
+  },
 
-      -- Statusline helper function
-      _G.kinggrey = _G.kinggrey or {}
-      _G.kinggrey.statusline = {
-        get_mode = function()
-          local mode = vim.api.nvim_get_mode().mode
-          local mode_map = {
-            n = "NORMAL",
-            i = "INSERT",
-            v = "VISUAL",
-            V = "VISUAL LINE",
-            ["\22"] = "VISUAL BLOCK",
-            c = "COMMAND",
-            t = "TERMINAL",
-            R = "REPLACE",
-            s = "SELECT",
-            S = "SELECT LINE",
-          }
-          return mode_map[mode] or mode:upper()
-        end,
-      }
-      package.loaded["kinggrey.statusline"] = _G.kinggrey.statusline
+  -- Tokyo Night -- same "dark, vibrant, high-contrast" lane as dracula
+  {
+    "folke/tokyonight.nvim",
+    priority = 1000,
+    opts = {
+      style = "storm", -- storm, moon, night, day
+      transparent = false,
+      styles = { comments = { italic = true } },
+    },
+  },
 
-      -- Minimal statusline: left corner | (invisible middle) | right corner
-      -- Only shows text at corners, no background bar
-      vim.opt.statusline =
-        "%{toupper(v:lua.require('kinggrey.statusline').get_mode())} %f%=%l:%c %p%%"
+  -- Kanagawa -- muted/warm dark theme, good contrast with the above two
+  {
+    "rebelot/kanagawa.nvim",
+    priority = 1000,
+    opts = {
+      theme = "wave", -- wave, dragon, lotus
+      transparent = false,
+    },
+  },
+
+  -- Rose Pine -- softer, low-contrast dark theme
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    priority = 1000,
+    opts = {
+      variant = "main", -- main, moon, dawn
+      dark_variant = "main",
+    },
+  },
+
+  -- Nightfox -- another highly configurable dark family, ships multiple
+  -- variants (nightfox, duskfox, nordfox, terafox, carbonfox) as one plugin
+  {
+    "EdenEast/nightfox.nvim",
+    priority = 1000,
+    opts = {},
+  },
+
+  -- Everforest -- warm, low-contrast, easy on the eyes for long sessions
+  {
+    "sainnhe/everforest",
+    priority = 1000,
+    config = function()
+      vim.g.everforest_background = "medium" -- soft, medium, hard
+      vim.g.everforest_enable_italic = true
     end,
   },
 }

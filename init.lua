@@ -40,6 +40,10 @@ require("lazy").setup(all_plugins, {
   },
 })
 
+-- Apply whichever theme you last picked (falls back to a default if none
+-- saved yet). See lua/kinggrey/theme.lua for how persistence works.
+require("kinggrey.theme").load()
+
 -- Load base46 cache files if they exist (only when using base46/NvChad)
 local base46_dir = vim.fn.stdpath("data") .. "/base46_cache"
 if vim.fn.isdirectory(base46_dir) == 1 then

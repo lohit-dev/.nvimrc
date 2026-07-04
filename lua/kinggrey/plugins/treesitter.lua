@@ -4,6 +4,9 @@
 
 return {
   "nvim-treesitter/nvim-treesitter",
+  dependencies = { "neovim-treesitter/treesitter-parser-registry" },
+  lazy = false,
+  branch = "master",
   build = ":TSUpdate",
   main = "nvim-treesitter.configs", -- Sets main module to use for opts
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`

@@ -11,12 +11,10 @@ return {
     },
     ft = { "go", "gomod", "gowork" },
     build = function()
-      vim.cmd [[silent! GoInstallDeps]]
+      vim.cmd([[silent! GoInstallDeps]])
     end,
     ---@module "gopher"
     ---@type gopher.Config
-    opts = {
-
-    },
+    opts = {},
   },
 }
