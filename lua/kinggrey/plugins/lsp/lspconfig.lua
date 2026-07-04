@@ -21,6 +21,7 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
         end
         map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+        map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
         map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
         map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
         map("gri", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
@@ -115,24 +116,38 @@ return {
       },
     })
     local capabilities = require("blink.cmp").get_lsp_capabilities()
-    local lspconfig = require("lspconfig")
-    
+
     local servers = {
       clangd = {},
-      gopls = {},
+      gopls = {
+        settings = {
+          gopls = {
+            analyses = {
+              shadow = true,
+              unusedparams = true,
+            },
+            gofumpt = true,
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+            staticcheck = true,
+          },
+        },
+      },
       pyright = {},
-      rust_analyzer = {},
       -- Web development servers
       html = {},
       cssls = {},
       eslint = {},
+      jsonls = {},
+      vue_ls = {},
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-      --
-      -- Some languages (like typescript) have entire language plugins that can be useful:
-      --    https://github.com/pmizio/typescript-tools.nvim
-      --
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
-      --
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
@@ -159,111 +174,27 @@ return {
     --
     -- You can add other tools here that you want Mason to install
     -- for you, so that they are available from within Neovim.
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      "stylua", -- Used to format Lua code
-    })
-    require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-    -- Add TypeScript and Vue servers to ensure_installed
-    vim.list_extend(ensure_installed, {
-      "typescript-language-server",
-      "vue-language-server",
-    })
-    
     require("mason-lspconfig").setup({
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      ensure_installed = vim.tbl_keys(servers),
       automatic_installation = false,
       handlers = {
-        -- Default handler for most servers
         function(server_name)
           local server = servers[server_name] or {}
-          -- This handles overriding only values explicitly passed
-          -- by the server configuration above. Useful when disabling
-          -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities =
             vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
           require("lspconfig")[server_name].setup(server)
         end,
-        
-        -- TypeScript LSP with Vue plugin support
-        ["typescript-language-server"] = function()
-          local mason_packages = vim.fn.stdpath("data") .. "/mason/packages"
-          local volar_path = mason_packages .. "/vue-language-server/node_modules/@vue/language-server"
-          
-          -- Try to find vue-language-server path
-          local volar_node_modules = mason_packages .. "/vue-language-server/node_modules"
-          if vim.fn.isdirectory(volar_node_modules) == 0 then
-            -- Fallback: try global npm installation
-            volar_path = "/usr/local/lib/node_modules/@vue/language-server"
-            if vim.fn.isdirectory(volar_path) == 0 then
-              -- Use empty string if not found (plugin will try to find it)
-              volar_path = ""
-            end
-          end
-          
-          lspconfig.ts_ls.setup({
-            capabilities = capabilities,
-            init_options = {
-              plugins = {
-                {
-                  name = "@vue/typescript-plugin",
-                  location = volar_path,
-                  languages = { "vue" },
-                },
-              },
-            },
-            filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-            settings = {
-              typescript = {
-                inlayHints = {
-                  includeInlayParameterNameHints = "all",
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                  includeInlayFunctionParameterTypeHints = true,
-                  includeInlayVariableTypeHints = true,
-                  includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-                  includeInlayPropertyDeclarationTypeHints = true,
-                  includeInlayFunctionLikeReturnTypeHints = true,
-                  includeInlayEnumMemberValueHints = true,
-                },
-              },
-            },
-          })
-        end,
-        
-        -- Vue language server (Volar)
-        ["vue-language-server"] = function()
-          lspconfig.volar.setup({
-            capabilities = capabilities,
-            filetypes = { "vue", "javascript", "typescript", "javascriptreact", "typescriptreact", "json" },
-            init_options = {
-              vue = {
-                hybridMode = false,
-              },
-            },
-            settings = {
-              typescript = {
-                inlayHints = {
-                  enumMemberValues = {
-                    enabled = true,
-                  },
-                  functionLikeReturnTypes = {
-                    enabled = true,
-                  },
-                  propertyDeclarationTypes = {
-                    enabled = true,
-                  },
-                  parameterTypes = {
-                    enabled = true,
-                    suppressWhenArgumentMatchesName = true,
-                  },
-                  variableTypes = {
-                    enabled = true,
-                  },
-                },
-              },
-            },
-          })
-        end,
+      },
+    })
+
+    require("mason-tool-installer").setup({
+      ensure_installed = {
+        "gofumpt",
+        "goimports",
+        "markdownlint",
+        "prettierd",
+        "stylua",
+        "typescript-language-server",
       },
     })
   end,

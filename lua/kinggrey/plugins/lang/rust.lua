@@ -5,13 +5,17 @@ return {
   -- Rustaceanvim - Rust Analyzer integration
   {
     "mrcjkb/rustaceanvim",
-    version = "^5", -- Latest version
+    version = "^9", -- Latest version
     lazy = false, -- This plugin is already lazy
     ft = { "rust" },
     config = function()
       vim.g.rustaceanvim = {
         -- Plugin configuration
-        tools = {},
+        tools = {
+          code_actions = {
+            ui_select_fallback = true,
+          },
+        },
         -- LSP configuration
         server = {
           on_attach = function(client, bufnr)
@@ -30,10 +34,21 @@ return {
               { silent = true, buffer = bufnr, desc = "Rust hover actions" }
             )
           end,
-          settings = {
+          default_settings = {
             ["rust-analyzer"] = {
-              -- Enable check on save with clippy
+              cargo = {
+                allFeatures = true,
+                buildScripts = {
+                  enable = true,
+                },
+              },
               checkOnSave = true,
+              check = {
+                command = "clippy",
+              },
+              procMacro = {
+                enable = true,
+              },
             },
           },
         },

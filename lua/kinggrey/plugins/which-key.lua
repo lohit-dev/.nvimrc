@@ -42,6 +42,7 @@ return {
     },
     spec = {
       { "<leader>f", group = "[F]ind" },
+      { "<leader>g", group = "[G]it" },
       { "<leader>t", group = "[T]oggle" },
       { "<leader>h", desc = "Terminal horizontal" },
       { "<leader>b", group = "[B]uffer" },
@@ -81,6 +82,8 @@ return {
       { "<leader>x", desc = "Close buffer" },
       { "<leader>fm", desc = "[F]ormat buffer" },
       { "<leader>gt", desc = "[G]it [S]tatus" },
+      { "<leader>gg", desc = "[G]it Lazy[G]it" },
+      { "<leader>gd", desc = "[G]it [D]iffview open" },
       { "<leader>cm", desc = "[C]ommit history" },
       { "<leader>pt", desc = "[P]ick hidden [T]erminal" },
       { "<leader>bt", desc = "[B]uffer [T]oggle tabline" },

@@ -8,6 +8,7 @@ return {
   -- Core plugins
   require("kinggrey.plugins.guess-indent"),
   require("kinggrey.plugins.gitsigns"),
+  require("kinggrey.plugins.diffview"),
   require("kinggrey.plugins.which-key"),
   require("kinggrey.plugins.project"),
   require("kinggrey.plugins.telescope"),
@@ -42,4 +43,5 @@ return {
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),
   require("kinggrey.plugins.lang.go"),
+  require("kinggrey.plugins.lang.typescript"),
 }

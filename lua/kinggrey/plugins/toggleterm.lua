@@ -76,6 +76,27 @@ return {
       count = 4,
     })
 
+    local lazygit = Terminal:new({
+      cmd = "lazygit",
+      direction = "float",
+      hidden = true,
+      close_on_exit = true,
+      float_opts = {
+        border = "rounded",
+        width = function()
+          return math.floor(vim.o.columns * 0.95)
+        end,
+        height = function()
+          return math.floor(vim.o.lines * 0.92)
+        end,
+      },
+      on_close = function()
+        vim.defer_fn(function()
+          vim.cmd("checktime")
+        end, 50)
+      end,
+    })
+
     -- Terminal vertical split
     vim.keymap.set("n", "<leader>v", function()
       vertical_term:toggle()
@@ -91,13 +112,16 @@ return {
       float_term:toggle()
     end, { desc = "Toggle terminal float" })
 
+    vim.keymap.set("n", "<leader>gg", function()
+      lazygit:toggle()
+    end, { desc = "Open LazyGit" })
+
     vim.keymap.set("n", "<leader>pt", "<cmd>TermSelect<CR>", { desc = "Pick hidden terminal" })
 
     -- Terminal window mappings for easier navigation
     local function set_terminal_keymaps()
       local opts = { buffer = 0 }
       vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
-      vim.keymap.set("t", "jk", [[<C-\><C-n>]], opts)
       vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
       vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
       vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
