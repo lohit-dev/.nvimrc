@@ -20,7 +20,18 @@ return {
       function()
         require("oil").open()
       end,
-      desc = "Open Oil file manager",
+      desc = "Focus explorer",
+    },
+    {
+      "<C-n>",
+      function()
+        if vim.bo.filetype == "oil" then
+          vim.cmd("close")
+          return
+        end
+        vim.cmd("Oil --float")
+      end,
+      desc = "Toggle explorer",
     },
   },
   config = function()

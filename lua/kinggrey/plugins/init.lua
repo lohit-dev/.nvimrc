@@ -9,10 +9,12 @@ return {
   require("kinggrey.plugins.guess-indent"),
   require("kinggrey.plugins.gitsigns"),
   require("kinggrey.plugins.which-key"),
+  require("kinggrey.plugins.project"),
   require("kinggrey.plugins.telescope"),
 
   -- Editing plugins
   require("kinggrey.plugins.formatting"),
+  require("kinggrey.plugins.comment"),
   require("kinggrey.plugins.treesitter"),
   require("kinggrey.plugins.autopairs"),
   require("kinggrey.plugins.indent_line"),
@@ -29,6 +31,7 @@ return {
   require("kinggrey.plugins.neo-tree"), -- Disabled, kept for future just in case
   require("kinggrey.plugins.toggleterm"),
   require("kinggrey.plugins.web-tools"), -- Web dev tools (browser-sync, hurl, npm/yarn/npx)
+  require("kinggrey.plugins.harpoon"),
   require("kinggrey.plugins.nvchad"),
   require("kinggrey.plugins.leetcode"),
   require("kinggrey.plugins.tmux"),

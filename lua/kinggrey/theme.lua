@@ -120,14 +120,14 @@ end, {
   complete = "color",
 })
 
---- <leader>ut: Telescope colorscheme picker with live preview. Persistence
+--- <leader>th: Telescope colorscheme picker with live preview. Persistence
 -- is automatic -- whatever you land on (by pressing <CR>) fires the
 -- ColorScheme autocmd above, which saves it. Pressing <Esc>/<C-c> reverts to
 -- whatever was active before you opened the picker, and that revert fires
 -- the same autocmd, so it correctly re-saves the original instead of
 -- leaving a half-picked theme persisted.
-vim.keymap.set("n", "<leader>ut", function()
+vim.keymap.set("n", "<leader>th", function()
   require("telescope.builtin").colorscheme({ enable_preview = true })
-end, { desc = "[U]I: pick [T]heme (Telescope, live preview)" })
+end, { desc = "[T]heme picker" })
 
 return M

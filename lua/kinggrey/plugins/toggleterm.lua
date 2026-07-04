@@ -77,12 +77,12 @@ return {
     })
 
     -- Terminal vertical split
-    vim.keymap.set("n", "<leader>tv", function()
+    vim.keymap.set("n", "<leader>v", function()
       vertical_term:toggle()
     end, { desc = "Toggle terminal vertical" })
 
     -- Terminal horizontal split
-    vim.keymap.set("n", "<leader>th", function()
+    vim.keymap.set("n", "<leader>h", function()
       horizontal_term:toggle()
     end, { desc = "Toggle terminal horizontal" })
 
@@ -90,6 +90,8 @@ return {
     vim.keymap.set("n", "<leader>tf", function()
       float_term:toggle()
     end, { desc = "Toggle terminal float" })
+
+    vim.keymap.set("n", "<leader>pt", "<cmd>TermSelect<CR>", { desc = "Pick hidden terminal" })
 
     -- Terminal window mappings for easier navigation
     local function set_terminal_keymaps()

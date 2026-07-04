@@ -46,7 +46,28 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("i", "jj", "<Esc>")
-vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "[W]rite/Save file" })
+vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>write<CR>", { desc = "Save file" })
+vim.keymap.set("n", "<C-c>", function()
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  vim.fn.setreg("+", table.concat(lines, "\n"))
+end, { desc = "Copy whole file" })
+
+vim.keymap.set("n", "[", function()
+  vim.cmd("put! =repeat(nr2char(10), v:count1)")
+end, { desc = "Empty line above" })
+
+vim.keymap.set("n", "]", function()
+  vim.cmd("put =repeat(nr2char(10), v:count1)")
+end, { desc = "Empty line below" })
+
+vim.keymap.set("n", "<leader>x", "<cmd>bdelete<CR>", { desc = "Close buffer" })
+
+vim.keymap.set("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
+vim.keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close split" })
+vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize splits" })
+vim.keymap.set("n", "<M-l>", "<cmd>vertical resize +2<CR>", { desc = "Increase split width" })
+vim.keymap.set("n", "<M-h>", "<cmd>vertical resize -2<CR>", { desc = "Decrease split width" })
 -- Buffer deletion commands
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "[B]uffer [D]elete (current)" })
 vim.keymap.set("n", "<leader>br", function()
@@ -152,17 +173,26 @@ vim.keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "[B]uffer [P]re
 
 vim.keymap.set("n", ";", ":", { desc = "Enter command mode" })
 -- vim.keymap.set("n", ":", ";", { desc = "Repeat last f/F/t/T motion" })
-vim.keymap.set(
-  "n",
-  "<leader>x",
-  vim.diagnostic.setloclist,
-  { desc = "Open diagnostic [Q]uickfix list" }
-)
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+vim.keymap.set("n", "[D", function()
+  vim.diagnostic.jump({ count = -9999, float = true })
+end, { desc = "First diagnostic" })
+vim.keymap.set("n", "]D", function()
+  vim.diagnostic.jump({ count = 9999, float = true })
+end, { desc = "Last diagnostic" })
+
+vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Cursor left" })
+vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Cursor right" })
+vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Cursor down" })
+vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Cursor up" })
+vim.keymap.set("i", "<C-e>", "<End>", { desc = "End of line" })
+vim.keymap.set("i", "<C-b>", "<Home>", { desc = "Beginning of line" })
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
   group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
@@ -172,84 +202,41 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Git command keymaps
-vim.keymap.set("n", "<leader>ga", function()
-  vim.cmd("!git add .")
-end, { desc = "[G]it [a]dd all files" })
-vim.keymap.set("n", "<leader>gA", function()
-  vim.ui.input({ prompt = "Git add: " }, function(input)
-    if input then
-      vim.cmd("!git add " .. input)
-    end
-  end)
-end, { desc = "[G]it [A]dd specific files" })
+vim.keymap.set("n", "<leader>wa", function()
+  vim.lsp.buf.add_workspace_folder()
+end, { desc = "[W]orkspace [A]dd folder" })
 
-vim.keymap.set("n", "<leader>gc", function()
-  vim.ui.input({ prompt = "Commit message: " }, function(input)
-    if input then
-      vim.cmd("!git commit -m '" .. input .. "'")
-    end
-  end)
-end, { desc = "[G]it [c]ommit" })
+vim.keymap.set("n", "<leader>wr", function()
+  vim.lsp.buf.remove_workspace_folder()
+end, { desc = "[W]orkspace [R]emove folder" })
 
-vim.keymap.set("n", "<leader>gp", function()
-  vim.cmd("!git push")
-end, { desc = "[G]it [p]ush" })
+vim.keymap.set("n", "<leader>wl", function()
+  local folders = vim.lsp.buf.list_workspace_folders()
+  if vim.tbl_isempty(folders) then
+    vim.notify("No LSP workspace folders", vim.log.levels.INFO)
+    return
+  end
 
-vim.keymap.set("n", "<leader>gs", function()
-  vim.cmd("!git status")
-end, { desc = "[G]it [s]tatus" })
+  vim.notify(table.concat(folders, "\n"), vim.log.levels.INFO, { title = "LSP Workspace Folders" })
+end, { desc = "[W]orkspace [L]ist folders" })
 
-vim.keymap.set("n", "<leader>gS", function()
-  vim.cmd("!git stash")
-end, { desc = "[G]it [S]tash" })
+vim.keymap.set("n", "<leader>wk", function()
+  require("which-key").show({ global = true })
+end, { desc = "[W]hich-key query lookup" })
 
-vim.keymap.set("n", "<leader>gr", function()
-  vim.cmd("!git reflog")
-end, { desc = "[G]it [r]eflog" })
+vim.keymap.set("n", "<leader>W", function()
+  require("telescope.builtin").keymaps()
+end, { desc = "All keymaps" })
 
-vim.keymap.set("n", "<leader>gR", function()
-  vim.ui.input({ prompt = "Git rebase (branch or options): " }, function(input)
-    if input then
-      vim.cmd("!git rebase " .. input)
-    else
-      vim.cmd("!git rebase")
-    end
-  end)
-end, { desc = "[G]it [R]ebase" })
+vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]et loclist" })
 
--- Package Management (Lazy.nvim)
-vim.keymap.set("n", "<leader>pl", function()
-  require("lazy").show()
-end, { desc = "[P]lugins [L]azy (show)" })
+vim.keymap.set("n", "<leader>fm", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "[F]ormat buffer" })
 
-vim.keymap.set("n", "<leader>pi", function()
-  require("lazy").install()
-end, { desc = "[P]lugins [I]nstall" })
-
-vim.keymap.set("n", "<leader>pS", function()
-  require("lazy").sync()
-end, { desc = "[P]lugins [S]ync" })
-
-vim.keymap.set("n", "<leader>ps", function()
-  require("lazy").status()
-end, { desc = "[P]lugins [S]tatus" })
-
-vim.keymap.set("n", "<leader>pu", function()
-  require("lazy").check()
-end, { desc = "[P]lugins Check for [U]pdates" })
-
-vim.keymap.set("n", "<leader>pU", function()
-  require("lazy").update()
-end, { desc = "[P]lugins [U]pdate" })
-
--- Mason Package Manager
-vim.keymap.set("n", "<leader>pm", function()
-  vim.cmd("Mason")
-end, { desc = "[P]ackages [M]ason" })
-
-vim.keymap.set("n", "<leader>pM", function()
-  vim.cmd("MasonToolsUpdate")
-end, { desc = "[P]ackages [M]ason Update" })
+vim.keymap.set("n", "<leader>bt", function()
+  vim.o.showtabline = vim.o.showtabline == 0 and 2 or 0
+end, { desc = "[B]uffer [T]oggle tabline" })
 
 -- UI toggles
 local kinggrey_themes = { "dracula-soft", "catppuccin", "gruvbox-material" }
@@ -277,10 +264,17 @@ local function cycle_colorscheme()
   end
 end
 
-vim.keymap.set("n", "<leader>un", function()
+vim.keymap.set("n", "<leader>rn", function()
   vim.wo.number = true
   vim.wo.relativenumber = not vim.wo.relativenumber
 end, { desc = "Toggle relative line numbers" })
+
+vim.keymap.set("n", "<leader>n", function()
+  vim.wo.number = not vim.wo.number
+  if not vim.wo.number then
+    vim.wo.relativenumber = false
+  end
+end, { desc = "Toggle line numbers" })
 
 vim.keymap.set("n", "<leader>uw", function()
   vim.wo.wrap = not vim.wo.wrap
@@ -311,6 +305,7 @@ leet_map("<leader>lc", "console", "[L]eetCode [C]onsole panel")
 leet_map("<leader>lr", "run", "[L]eetCode [R]un question")
 leet_map("<leader>lt", "test", "[L]eetCode [T]est question")
 leet_map("<leader>ls", "submit", "[L]eetCode [S]ubmit answer")
+leet_map("<leader>ll", "menu", "[L]eetCode home")
 leet_map("<leader>lH", "stats", "[L]eetCode s[Ta]ts toggle")
 leet_map("<leader>lL", "lang", "[L]eetCode change [L]anguage")
 leet_map("<leader>ld", "daily", "[L]eetCode [D]aily problem")

@@ -205,20 +205,6 @@ return {
         end,
         "fallback",
       },
-      ["<C-j>"] = {
-        function(cmp)
-          return cmp.select_prev({ auto_insert = true })
-        end,
-        "snippet_backward",
-        "fallback",
-      },
-      ["<C-k>"] = {
-        function(cmp)
-          return cmp.select_next({ auto_insert = true })
-        end,
-        "snippet_forward",
-        "fallback",
-      },
       ["<CR>"] = {
         function(cmp)
           -- If menu is visible, accept the selection

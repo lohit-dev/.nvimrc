@@ -140,21 +140,21 @@ return {
       })
 
       -- NvChad-like keybindings for noice
-      vim.keymap.set("n", "<leader>snl", function()
+      vim.keymap.set("n", "<leader>Nl", function()
         require("noice").cmd("last")
-      end, { desc = "[S]how [N]oice [L]ast message" })
+      end, { desc = "[N]oice [L]ast message" })
 
-      vim.keymap.set("n", "<leader>snh", function()
+      vim.keymap.set("n", "<leader>Nh", function()
         require("noice").cmd("history")
-      end, { desc = "[S]how [N]oice [H]istory" })
+      end, { desc = "[N]oice [H]istory" })
 
-      vim.keymap.set("n", "<leader>sna", function()
+      vim.keymap.set("n", "<leader>Na", function()
         require("noice").cmd("all")
-      end, { desc = "[S]how [N]oice [A]ll messages" })
+      end, { desc = "[N]oice [A]ll messages" })
 
-      vim.keymap.set("n", "<leader>snd", function()
+      vim.keymap.set("n", "<leader>Nd", function()
         require("noice").cmd("dismiss")
-      end, { desc = "[S]how [N]oice [D]ismiss" })
+      end, { desc = "[N]oice [D]ismiss" })
 
       vim.keymap.set({ "i", "n", "s" }, "<c-f>", function()
         if not require("noice.lsp").scroll(4) then

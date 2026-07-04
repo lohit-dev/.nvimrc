@@ -4,7 +4,10 @@
 
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = { "neovim-treesitter/treesitter-parser-registry" },
+  dependencies = {
+    "neovim-treesitter/treesitter-parser-registry",
+    "nvim-treesitter/nvim-treesitter-textobjects",
+  },
   lazy = false,
   branch = "master",
   build = ":TSUpdate",
@@ -31,6 +34,28 @@ return {
       additional_vim_regex_highlighting = { "rust", "go" },
     },
     indent = { enable = true, disable = { "ruby" } },
+    textobjects = {
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          ["an"] = "@block.outer",
+          ["in"] = "@block.inner",
+        },
+      },
+      move = {
+        enable = true,
+        set_jumps = true,
+        goto_previous_start = {
+          ["[n"] = "@block.outer",
+          ["[N"] = "@function.outer",
+        },
+        goto_next_start = {
+          ["]n"] = "@block.outer",
+          ["]N"] = "@function.outer",
+        },
+      },
+    },
   },
   -- There are additional nvim-treesitter modules that you can use to interact
   -- with nvim-treesitter. You should go explore a few and see what interests you:
