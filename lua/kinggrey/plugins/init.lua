@@ -23,6 +23,7 @@ return {
   -- UI plugins
   require("kinggrey.plugins.ui"),
   require("kinggrey.plugins.profile"), -- Profile/dashboard homepage
+  require("kinggrey.plugins.colorizer"), -- Profile/dashboard homepage
 
   -- Utility plugins
   require("kinggrey.plugins.debug"),
@@ -35,6 +36,8 @@ return {
   require("kinggrey.plugins.nvchad"),
   require("kinggrey.plugins.leetcode"),
   require("kinggrey.plugins.tmux"),
+  require("kinggrey.plugins.fidget"),
+  require("kinggrey.plugins.treesj"),
 
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),
