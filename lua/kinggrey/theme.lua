@@ -64,40 +64,14 @@ function M.load()
   end
 end
 
---- Theme-agnostic statusline helper: shown mode name in the corner.
-_G.kinggrey = _G.kinggrey or {}
-_G.kinggrey.statusline = {
-  get_mode = function()
-    local mode = vim.api.nvim_get_mode().mode
-    local mode_map = {
-      n = "NORMAL",
-      i = "INSERT",
-      v = "VISUAL",
-      V = "VISUAL LINE",
-      ["\22"] = "VISUAL BLOCK",
-      c = "COMMAND",
-      t = "TERMINAL",
-      R = "REPLACE",
-      s = "SELECT",
-      S = "SELECT LINE",
-    }
-    return mode_map[mode] or mode:upper()
-  end,
-}
-package.loaded["kinggrey.statusline"] = _G.kinggrey.statusline
-
--- Minimal statusline: left corner | (invisible middle) | right corner.
--- Set once, works for any theme since it doesn't depend on a specific
--- theme's colors.
-vim.opt.statusline = "%{toupper(v:lua.require('kinggrey.statusline').get_mode())} %f%=%l:%c %p%%"
-
 --- Reapply the transparent-statusline highlight override. Runs on every
 --- ColorScheme change so it works no matter which theme is active, instead
 --- of being copy-pasted inside each theme's own setup function.
-local function apply_statusline_highlights()
-  local normal_fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
-  vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE", fg = normal_fg })
-  vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE", fg = normal_fg })
+local function refresh_lualine()
+  local ok, lualine = pcall(require, "kinggrey.lualine")
+  if ok then
+    lualine.refresh()
+  end
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", {
@@ -105,8 +79,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   callback = function()
     -- Persist whatever colorscheme just became active.
     M.save(vim.g.colors_name or "")
-    -- Re-apply the theme-agnostic statusline highlight tweak.
-    apply_statusline_highlights()
+    -- Rebuild lualine so the bubbles palette follows the active theme.
+    refresh_lualine()
   end,
 })
 

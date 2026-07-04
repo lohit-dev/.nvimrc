@@ -1,4 +1,11 @@
 return {
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("kinggrey.lualine").setup()
+    end,
+  },
   -- Notifications (nvim-notify) - NvChad-like notifications
   {
     "rcarriga/nvim-notify",
@@ -167,48 +174,6 @@ return {
           return "<c-b>"
         end
       end, { silent = true, expr = true, desc = "Scroll backward" })
-    end,
-  },
-  -- Breadcrumbs (NvChad-style navigation)
-  {
-    "SmiteshP/nvim-navic",
-    event = "VeryLazy",
-    dependencies = { "neovim/nvim-lspconfig" },
-    config = function()
-      require("nvim-navic").setup({
-        highlight = true,
-        separator = " 󰁔 ",
-        icons = {
-          File = "󰈙 ",
-          Module = " ",
-          Namespace = "󰌗 ",
-          Package = " ",
-          Class = "󰌗 ",
-          Method = "󰆧 ",
-          Property = "󰜢 ",
-          Field = "󰜢 ",
-          Constructor = "󰌗 ",
-          Enum = "󰒻 ",
-          Interface = "󰒻 ",
-          Function = "󰊕 ",
-          Variable = "󰆧 ",
-          Constant = "󰏿 ",
-          String = "󰅳 ",
-          Number = "󰎠 ",
-          Boolean = "󰁨 ",
-          Array = "󰅪 ",
-          Object = "󰅩 ",
-          Key = "󰌋 ",
-          Null = "󰟢 ",
-          EnumMember = "󰒻 ",
-          Struct = "󰌗 ",
-          Event = "󰓹 ",
-          Operator = "󰆕 ",
-          TypeParameter = "󰗴 ",
-        },
-        depth_limit = 0,
-        depth_limit_indicator = "..",
-      })
     end,
   },
   {

@@ -37,7 +37,7 @@ return {
   require("kinggrey.plugins.nvchad"),
   require("kinggrey.plugins.leetcode"),
   require("kinggrey.plugins.tmux"),
-  require("kinggrey.plugins.fidget"),
+  -- require("kinggrey.plugins.fidget"), disabled temporarily just for now
   require("kinggrey.plugins.treesj"),
 
   -- Language-specific plugins (lazy loaded by filetype)

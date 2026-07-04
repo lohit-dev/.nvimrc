@@ -19,7 +19,7 @@ return {
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
-        transparent_background = false,
+        transparent_background = true,
         integrations = {
           lualine = {},
           treesitter = true,
@@ -37,7 +37,7 @@ return {
       require("dracula").setup({
         theme = "dracula-soft",
         show_end_of_buffer = true,
-        transparent_bg = false,
+        transparent_bg = true,
         lualine_bg_color = "#44475a",
         italic_comment = true,
         overrides = function(c)
@@ -65,7 +65,7 @@ return {
     priority = 1000,
     opts = {
       style = "storm", -- storm, moon, night, day
-      transparent = false,
+      transparent = true,
       styles = { comments = { italic = true } },
     },
   },
@@ -76,7 +76,7 @@ return {
     priority = 1000,
     opts = {
       theme = "wave", -- wave, dragon, lotus
-      transparent = false,
+      transparent = true,
     },
   },
 
