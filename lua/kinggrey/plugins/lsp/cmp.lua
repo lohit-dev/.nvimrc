@@ -175,8 +175,8 @@ return {
         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
         treesitter_highlighting = true,
         show_documentation = false,
-        max_height = 4,
-        max_width = 80,
+        max_height = 8,
+        max_width = 100,
       },
     },
     -- APIs: https://github.com/Saghen/blink.cmp/blob/main/lua/blink/cmp/init.lua
