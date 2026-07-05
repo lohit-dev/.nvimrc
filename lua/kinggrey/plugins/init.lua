@@ -34,6 +34,7 @@ return {
   require("kinggrey.plugins.toggleterm"),
   require("kinggrey.plugins.web-tools"), -- Web dev tools (browser-sync, hurl, npm/yarn/npx)
   require("kinggrey.plugins.harpoon"),
+  require("kinggrey.plugins.persistence"), -- Session save/restore per project
   require("kinggrey.plugins.nvchad"),
   require("kinggrey.plugins.leetcode"),
   require("kinggrey.plugins.tmux"),
