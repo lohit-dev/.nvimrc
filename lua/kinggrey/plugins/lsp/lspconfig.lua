@@ -21,7 +21,34 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
         end
         map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
-        map("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
+
+        local function dedupe(items)
+          local seen, unique = {}, {}
+          for _, item in ipairs(items) do
+            local key = item.filename .. ":" .. item.lnum .. ":" .. item.col
+            if not seen[key] then
+              seen[key] = true
+              table.insert(unique, item)
+            end
+          end
+          return unique
+        end
+
+        map("gd", function()
+          vim.lsp.buf.definition({
+            on_list = function(options)
+              local items = dedupe(options.items)
+              if #items == 1 then
+                vim.cmd("edit " .. vim.fn.fnameescape(items[1].filename))
+                vim.api.nvim_win_set_cursor(0, { items[1].lnum, items[1].col - 1 })
+              else
+                vim.fn.setqflist({}, " ", { title = options.title, items = items })
+                require("telescope.builtin").quickfix()
+              end
+            end,
+          })
+        end, "[G]oto [D]efinition")
+
         map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
         map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
         map("gri", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")

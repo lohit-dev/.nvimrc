@@ -21,14 +21,7 @@ return {
 
       local tsserver_plugins = {}
       if vim.fn.isdirectory(vue_plugin_path) == 1 then
-        tsserver_plugins = {
-          {
-            name = "@vue/typescript-plugin",
-            location = vue_plugin_path,
-            languages = { "vue" },
-            configNamespace = "typescript",
-          },
-        }
+        tsserver_plugins = { "@vue/typescript-plugin" }
       end
 
       return {
