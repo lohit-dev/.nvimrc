@@ -148,6 +148,7 @@ local function config()
       theme = bubbles_theme(),
       component_separators = "",
       section_separators = { left = "", right = "" },
+      globalstatus = true,
     },
     sections = active,
     inactive_sections = inactive,

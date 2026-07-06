@@ -153,6 +153,8 @@ return {
       completion = {
         menu = {
           auto_show = true,
+          border = "rounded",
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
           draw = {
             columns = {
               { "kind_icon" },
@@ -237,6 +239,10 @@ return {
       documentation = {
         auto_show = true,
         auto_show_delay_ms = 500,
+        window = {
+          border = "rounded",
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+        },
         draw = function(opts)
           if opts.item and opts.item.documentation then
             -- Try to use pretty_hover parser if available
