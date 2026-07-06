@@ -20,6 +20,7 @@ return {
         timeout = 1200,
         top_down = false,
         render = "wrapped-compact",
+        background_colour = "#0d0d0b",
         max_height = function()
           return math.max(1, math.floor(vim.o.lines * 0.2))
         end,
