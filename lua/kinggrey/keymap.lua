@@ -287,10 +287,7 @@ end, { desc = "Toggle list characters" })
 vim.keymap.set("n", "<leader>ut", cycle_colorscheme, { desc = "Cycle colorscheme" })
 
 local function leet_exec(cmd)
-  local ok, err = pcall(vim.cmd, "Leet " .. cmd)
-  if not ok then
-    vim.notify("Leet command failed: " .. cmd .. "\n" .. err, vim.log.levels.ERROR)
-  end
+  vim.cmd("Leet " .. cmd)
 end
 
 local function leet_map(lhs, cmd, desc)
@@ -306,10 +303,19 @@ leet_map("<leader>lr", "run", "[L]eetCode [R]un question")
 leet_map("<leader>lt", "test", "[L]eetCode [T]est question")
 leet_map("<leader>ls", "submit", "[L]eetCode [S]ubmit answer")
 leet_map("<leader>ll", "menu", "[L]eetCode home")
-leet_map("<leader>lH", "stats", "[L]eetCode s[Ta]ts toggle")
+leet_map("<leader>lH", "desc stats", "[L]eetCode s[Ta]ts toggle")
 leet_map("<leader>lL", "lang", "[L]eetCode change [L]anguage")
 leet_map("<leader>ld", "daily", "[L]eetCode [D]aily problem")
 leet_map("<leader>lo", "open", "[L]eetCode [O]pen in browser")
+vim.keymap.set("n", "<leader>li", function()
+  local ok, image = pcall(require, "image")
+  if ok then
+    image.clear()
+    vim.notify("Images cleared", vim.log.levels.INFO)
+  else
+    vim.notify("image.nvim not loaded", vim.log.levels.WARN)
+  end
+end, { desc = "Clear ghost [I]mages" })
 
 -- Code Actions
 vim.keymap.set({ "n", "v" }, "<leader>ca", function()
