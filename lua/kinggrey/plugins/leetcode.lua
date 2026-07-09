@@ -1,3 +1,12 @@
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  group = vim.api.nvim_create_augroup("kinggrey-leetcode-markdown-conceal", { clear = true }),
+  callback = function()
+    vim.opt_local.conceallevel = 2
+    vim.opt_local.concealcursor = "nc"
+  end,
+})
+
 return {
   {
     "kawre/leetcode.nvim",

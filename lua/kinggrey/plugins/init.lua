@@ -40,6 +40,7 @@ return {
   require("kinggrey.plugins.tmux"),
   -- require("kinggrey.plugins.fidget"), disabled temporarily just for now
   require("kinggrey.plugins.treesj"),
+  require("kinggrey.plugins.markdown"),
 
   -- Language-specific plugins (lazy loaded by filetype)
   require("kinggrey.plugins.lang.rust"),
